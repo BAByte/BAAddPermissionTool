@@ -1,4 +1,4 @@
-package com.example.ba.baperssiontool.BAPermissionTool;
+package com.example.addpermission.BAPermissionTool;
 
 /**
  * Created by BA on 2017/11/14 0014.
@@ -12,5 +12,5 @@ public interface PermissionCallBack {
     public void onSuccess();
 
     //申请失败的回调接口，参数是请求失败的权限的数组
-    public void onFail(String [] permissions);
+    public void onFail(String[] permissions);
 }

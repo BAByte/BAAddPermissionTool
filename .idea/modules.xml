@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BAPerssionTool.iml" filepath="$PROJECT_DIR$/BAPerssionTool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/addpermission/addpermission.iml" filepath="$PROJECT_DIR$/addpermission/addpermission.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

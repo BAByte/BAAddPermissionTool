@@ -1,7 +1,8 @@
-package com.example.ba.baperssiontool.BAPermissionTool;
+package com.example.addpermission.BAPermissionTool;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+
 /**
  * Created by BA on 2017/11/14 0014.
  *

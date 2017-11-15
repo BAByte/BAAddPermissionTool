@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.ba.baperssiontool.BAPermissionTool.AddPermission;
-import com.example.ba.baperssiontool.BAPermissionTool.PermissionCallBack;
+import com.example.addpermission.BAPermissionTool.AddPermission;
+import com.example.addpermission.BAPermissionTool.PermissionCallBack;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,24 +18,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AddPermission.requestPermission(this, 110, Manifest.permission.READ_EXTERNAL_STORAGE
+                , Manifest.permission.CAMERA
+                , Manifest.permission.INTERNET);
 
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        Log.d("sssssss", "onRequestPermissionsResult: Activity的回调");
-//        AddPermission.callBack(requestCode, permissions, grantResults, new PermissionCallBack() {
-//            @Override
-//            public void onSuccess() {
-//                Toast.makeText(MainActivity.this, "请求权限成功", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFail(String[] permissions) {
-//                Toast.makeText(MainActivity.this, "请求权限失败", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("sssssss", "onRequestPermissionsResult: Activity的回调");
+        AddPermission.callBack(requestCode, permissions, grantResults, new PermissionCallBack() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "请求权限成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFail(String[] permissions) {
+                Toast.makeText(MainActivity.this, "请求权限失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

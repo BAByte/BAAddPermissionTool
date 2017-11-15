@@ -6,10 +6,4 @@
     android:layout_height="match_parent"
     tools:context="com.example.ba.baperssiontool.MainActivity">
 
- <fragment
-    android:id="@+id/my_frament"
-    android:name="com.example.ba.baperssiontool.BlankFragment"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
-
 </android.support.constraint.ConstraintLayout>

@@ -113,8 +113,13 @@ class PermissionRequest {
         //判断哪些权限申请失败
         Log.d(TAG, "callBack: 判断请求码" + requestCode);
 
-        if ((requestCode == this.requestCode || checkListIsSame(permissions)) && grantResults.length > 0) {
-
+        //当Activity复写了onRequestPermissionsResult方法后，系统将不会回调Fragment的onRequestPermissionsResultb
+        //方法，所以要进行多一层的验证判断
+        if (requestCode != this.requestCode && isFragment(mContext) && checkListIsSame(permissions)) {
+            //因为在Activity中的RequestCode已经变了，所以要纠正
+            ((Fragment)mContext).onRequestPermissionsResult(this.requestCode,permissions,grantResults);
+            return; //如果确实出现了上面说的问题就直接调用Fragment的onRequestPermissionsResult方法来处理
+        } else if (requestCode==this.requestCode&&grantResults.length > 0) {
             for (int i = 0; i < grantResults.length; i++) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
                     nomoalList.remove(permissions[i]);

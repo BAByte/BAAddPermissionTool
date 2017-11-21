@@ -18,9 +18,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AddPermission.requestPermission(this, 110, Manifest.permission.READ_EXTERNAL_STORAGE
-                , Manifest.permission.CAMERA
-                , Manifest.permission.INTERNET);
+        AddPermission.with(this)
+                .code(110)
+                .permissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.INTERNET)
+                .go();
 
     }
 

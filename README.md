@@ -12,72 +12,115 @@ jar包下载地址：https://pan.baidu.com/s/1eStmojK
 
 ##对外提供的接口
 
-    /**
-     * Created by BA on 2017/11/14 0014.
-     *
-     * @Function : 请求权限功能封装类
-     */
 
-    public class AddPermission {
+       /**
+           * @return AddPermission
+           * @throws
+           * @fuction 绑定context
+           * @parm Activity或者Fragment
+           */
+          public static AddPermission with(@NonNull Object context) {
+              mContext = context;
+              return getInstance();
+          }
 
-        //请求权限 ，false代表已经有权限，true代表去获取权限
-        public static boolean requestPermission(Object context, int requestCode, String...permissions){
-          return PermissionRequest.getInstance().getPermission(context, requestCode, permissions);
-        }
+          /**
+           * @return AddPermission
+           * @throws
+           * @fuction 设置请求码
+           * @parm 请求码
+           */
+          public AddPermission code(int code) {
+              requestCode = code;
+              return permissionRequest;
+          }
 
-        //请求结果回调
-        public static void callBack(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults, PermissionCallBack callBack){
-            PermissionRequest.getInstance().callBack( requestCode, permissions, grantResults, callBack);
-        }
+          /**
+           * @return AddPermission
+           * @throws
+           * @fuction 设置请求的权限
+           * @parm 权限
+           */
+          public AddPermission permissions(@NonNull String... permissions) {
+              mPermissions = permissions;
+              return permissionRequest;
+          }
 
-        //自定提示框的样式 ，当用户勾选了不再提示后会提示用户去设置界面开启权限，这里可以自定义提示框
-        public static void setDialogBuliderStytle(AlertDialog.Builder builder){
-            PermissionRequest.getInstance().setDialog(builder);
-        }
-    }
+          /**
+           * @return false代表已经有权限或者小于安卓6.0，true代表去获取权限
+           * @throws
+           * @fuction 开始请求权限
+           * @parm
+           */
+          public boolean go() {
+              return checkAndroidVersion() && AddPermission.getInstance().getPermission();
+          }
 
+          /**
+           * @return AddPermission
+           * @throws
+           * @fuction 设置dialog的样式
+           * @parm AlertDialog.Builder
+           */
+          public AddPermission setDialogStyle(AlertDialog.Builder builder) {
+              permissionRequest.setDialog(builder);
+              return permissionRequest;
+          }
+
+          /**
+           * @return
+           * @throws
+           * @fuction 请求权限的回调接口
+           * @parm 将该方法(onRequestPermissionsResult)的参数传入
+           */
+          public static void callBack(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults, PermissionCallBack callBack) {
+              AddPermission.getInstance().insideCallBack(requestCode, permissions, grantResults, callBack);
+          }
 
 ---
 
 ##使用方法
 
 - Activity和碎片使用方法一样
-      public class MainActivity extends AppCompatActivity {
+     public class MainActivity extends AppCompatActivity {
 
-          @Override
-          protected void onCreate(Bundle savedInstanceState) {
-              super.onCreate(savedInstanceState);
-              setContentView(R.layout.activity_main);
+         @Override
+         protected void onCreate(Bundle savedInstanceState) {
+             super.onCreate(savedInstanceState);
+             setContentView(R.layout.activity_main);
 
-            //发起请求，会返回一个布尔型来确认有没有去请求权限，上面的接口有，自己看看
-              AddPermission.requestPermission(this,101, Manifest.permission.READ_EXTERNAL_STORAGE,
-                      Manifest.permission.CAMERA);
-          }
+             AddPermission.with(this)
+                     .code(110)
+                     .permissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                             Manifest.permission.CAMERA,
+                             Manifest.permission.INTERNET)
+                     .go();
 
-          @Override
-          public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                                 @NonNull int[] grantResults) {
-              AddPermission.callBack(requestCode, permissions, grantResults,
-                                     new PermissionCallBack() {
-                  @Override
-                  public void onSuccess() {
-                      Toast.makeText(MainActivity.this, "请求权限成功", Toast.LENGTH_SHORT).show();
-                  }
+         }
 
-                  @Override
-                  public void onFail(String[] permissions) {
-                      Toast.makeText(MainActivity.this, "请求权限失败", Toast.LENGTH_SHORT).show();
-                  }
-              });
-          }
+         @Override
+         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+             Log.d("sssssss", "onRequestPermissionsResult: Activity的回调");
+             AddPermission.callBack(requestCode, permissions, grantResults, new PermissionCallBack() {
+                 @Override
+                 public void onSuccess() {
+                     Toast.makeText(MainActivity.this, "请求权限成功", Toast.LENGTH_SHORT).show();
+                 }
 
-          @Override
-          protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-              super.onActivityResult(requestCode, resultCode, data);
-              //当用户勾选了不再提示后会提示用户去设置界面开启，然后你可以在这里再判断有没有获取到权限
-              //requestCode是202
-          }
-      }
+                 @Override
+                 public void onFail(String[] permissions) {
+                     Toast.makeText(MainActivity.this, "请求权限失败", Toast.LENGTH_SHORT).show();
+                 }
+             });
+         }
+
+         @Override
+         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+             super.onActivityResult(requestCode, resultCode, data);
+             //当用户勾选了不再提示后会提示用户去设置界面开启，然后你可以在这里再判断有没有获取到权限
+             //requestCode是202
+         }
+     }
 
 
 ---

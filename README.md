@@ -2,7 +2,7 @@
 
 在使用运行时权限时处理多权限太复杂，就写个工具包，需要注意的是，你请求的权限，
 必须在AndroidManifest.xml中声明
-jar包下载地址：https://pan.baidu.com/s/1eStmojK
+jar包下载地址：https://pan.baidu.com/s/1sl5bwNN
 
 ##使用前提
 

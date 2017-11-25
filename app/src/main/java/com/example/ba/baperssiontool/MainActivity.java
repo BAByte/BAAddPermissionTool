@@ -1,15 +1,16 @@
 package com.example.ba.baperssiontool;
 
 import android.Manifest;
-import android.content.Intent;
-import android.support.annotation.NonNull;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.addpermission.BAPermissionTool.AddPermission;
-import com.example.addpermission.BAPermissionTool.PermissionCallBack;
+import com.example.addpermission.BAPermissionTool.Fail;
+import com.example.addpermission.BAPermissionTool.Success;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,35 +19,43 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AddPermission.with(this)
-                .code(110)
-                .permissions(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.INTERNET)
-                .go();
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d("sssssss", "onRequestPermissionsResult: Activity的回调");
-        AddPermission.callBack(requestCode, permissions, grantResults, new PermissionCallBack() {
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(MainActivity.this, "请求权限成功", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFail(String[] permissions) {
-                Toast.makeText(MainActivity.this, "请求权限失败", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                //请求权限
+                AddPermission.with(MainActivity.this)
+                        .code(110)
+                        .permissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA)
+                        .go();
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //当用户勾选了不再提示后会提示用户去设置界面开启，然后你可以在这里再判断有没有获取到权限
-        //requestCode是202
+    /**
+     *@fuction 这个方法可以随便写名字，但是要声明注解： @Success
+     * 请求权限成功后会自动回调该方法，小于安卓m的也是自动回调该方法
+     *@parm 请求码
+     *@return
+     *@exception
+     */
+    @Success
+    public void requestSuccess(int code) {
+        if (code == 110)
+            Toast.makeText(this, "请求权限成功", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     *@fuction 失败的时候回调的方法
+     * 这个方法可以随便写名字，但是要声明注解：   @Fail
+     *@parm
+     *@return
+     *@exception
+     */
+    @Fail
+    public void requestFail(int code) {
+        if (code == 110)
+            Toast.makeText(this, "请求权限失败", Toast.LENGTH_SHORT).show();
     }
 }
